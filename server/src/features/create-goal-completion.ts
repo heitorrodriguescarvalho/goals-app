@@ -55,5 +55,8 @@ export async function createGoalCompletion({
     .insert(goalCompletions)
     .values({ goalId })
     .returning()
+
   const goalCompletion = insertResult[0]
+
+  return { goalCompletion }
 }

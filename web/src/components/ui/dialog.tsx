@@ -1,4 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { twMerge } from 'tailwind-merge'
 
 export function Dialog(props: DialogPrimitive.DialogProps) {
   return <DialogPrimitive.Dialog {...props} />
@@ -32,7 +33,10 @@ export function DialogContent(props: DialogPrimitive.DialogContentProps) {
 
       <DialogPrimitive.DialogContent
         {...props}
-        className="fixed z-50 right-0 top-0 bottom-0 w-[400px] h-screen border-l border-zinc-900 bg-zinc-950 p-8"
+        className={twMerge(
+          'fixed top-0 right-0 bottom-0 z-50 h-screen w-[400px] border-zinc-900 border-l bg-zinc-950 p-8',
+          props.className
+        )}
       />
     </DialogPortal>
   )
@@ -40,7 +44,7 @@ export function DialogContent(props: DialogPrimitive.DialogContentProps) {
 
 export function DialogTitle(props: DialogPrimitive.DialogTitleProps) {
   return (
-    <DialogPrimitive.DialogTitle {...props} className="text-lg font-semibold" />
+    <DialogPrimitive.DialogTitle {...props} className="font-semibold text-lg" />
   )
 }
 
@@ -50,7 +54,7 @@ export function DialogDescription(
   return (
     <DialogPrimitive.DialogDescription
       {...props}
-      className="text-zinc-400 text-sm leading-relaxed"
+      className="text-sm text-zinc-400 leading-relaxed"
     />
   )
 }

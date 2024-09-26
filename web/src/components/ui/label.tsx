@@ -6,7 +6,7 @@ export function Label(props: ComponentProps<'label'>) {
     <label
       {...props}
       className={twMerge(
-        'font-medium text-sm tracking-tight leading-normal',
+        'font-medium text-sm leading-normal tracking-tight',
         props.className
       )}
     />
