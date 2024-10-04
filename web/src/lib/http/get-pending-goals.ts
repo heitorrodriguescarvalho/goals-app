@@ -1,5 +1,3 @@
-'use server'
-
 type PendingGoalsType = {
   id: string
   title: string
@@ -7,8 +5,12 @@ type PendingGoalsType = {
   completionCount: number
 }[]
 
-export async function getPendingGoals(): Promise<PendingGoalsType> {
-  const response = await fetch('http://localhost:3333/pending-goals')
+export async function getPendingGoals({
+  userId,
+}: { userId: string }): Promise<PendingGoalsType> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/pending-goals/${userId}`
+  )
   const data: { pendingGoals: PendingGoalsType } = await response.json()
 
   return data.pendingGoals

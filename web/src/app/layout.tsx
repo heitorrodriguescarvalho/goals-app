@@ -1,7 +1,7 @@
-import Navbar from '@/components/home/navbar'
-import AuthProvider from '@/components/providers/auth-provider'
+import Navbar from '@/components/layout/navbar'
 import { ReactQueryProvider } from '@/components/providers/react-query-provider'
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -23,11 +23,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${font.className} bg-zinc-950 text-zinc-50 antialiased`}
+        className={`${font.className} flex min-h-screen flex-col bg-zinc-950 text-zinc-50 antialiased`}
       >
-        <Navbar />
         <ReactQueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <SessionProvider>
+            <Navbar />
+            {children}
+          </SessionProvider>
         </ReactQueryProvider>
       </body>
     </html>

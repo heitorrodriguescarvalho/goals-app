@@ -11,7 +11,7 @@ export async function getUser({ email }: GetUserType) {
     .select({
       id: users.id,
       email: users.email,
-      password: users.password,
+      image: users.image,
       createdAt: users.createdAt,
     })
     .from(users)

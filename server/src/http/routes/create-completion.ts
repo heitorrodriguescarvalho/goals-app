@@ -9,27 +9,17 @@ export const createCompletionRoute: FastifyPluginAsyncZod = async app => {
       schema: {
         body: z.object({
           goalId: z.string(),
+          userId: z.string(),
         }),
-        response: {
-          200: z.object({
-            goalCompletion: z.object({
-              id: z.string(),
-              goalId: z.string(),
-              createdAt: z.date(),
-            }),
-          }),
-          500: z.object({
-            error: z.string(),
-          }),
-        },
       },
     },
     async (req, res) => {
-      const { goalId } = req.body
+      const { goalId, userId } = req.body
 
       try {
         const { goalCompletion } = await createGoalCompletion({
           goalId,
+          userId,
         })
 
         res.code(200).send({ goalCompletion })

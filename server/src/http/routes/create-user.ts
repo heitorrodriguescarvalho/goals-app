@@ -8,42 +8,26 @@ export const createUserRoute: FastifyPluginAsyncZod = async app => {
     {
       schema: {
         body: z.object({
-          email: z.string().min(1),
-          password: z.string().min(1).optional(),
+          email: z.string().email(),
+          image: z.string().url().optional(),
         }),
-        response: {
-          200: z.object({
-            user: z.object({
-              id: z.string(),
-              email: z.string(),
-              password: z.string().nullable().optional(),
-              createdAt: z.date(),
-            }),
-          }),
-          409: z.object({
-            error: z.string(),
-          }),
-          500: z.object({
-            error: z.string(),
-          }),
-        },
       },
     },
     async (req, res) => {
-      const { email, password } = req.body
+      const { email, image } = req.body
 
       try {
-        const { user, error } = await createUser({ email, password })
+        const { user, error } = await createUser({ email, image })
 
         if (error) {
           res.code(409).send({ error })
           return
         }
 
-        if (!user) throw new Error('Failed to create user')
+        if (!user) throw new Error()
 
         res.code(200).send({ user })
-      } catch (err) {
+      } catch {
         res.code(500).send({ error: 'Failed to create user' })
       }
     }

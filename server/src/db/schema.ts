@@ -28,6 +28,9 @@ export const goalCompletions = pgTable('goal_competions', {
   goalId: text('goal_id')
     .references(() => goals.id, { onDelete: 'cascade' })
     .notNull(),
+  userId: text('user_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -38,7 +41,7 @@ export const users = pgTable('users', {
     .primaryKey()
     .$defaultFn(() => createId()),
   email: text('email').notNull().unique(),
-  password: text('password'),
+  image: text('image'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -46,4 +49,5 @@ export const users = pgTable('users', {
 
 export const usersRelations = relations(users, ({ many }) => ({
   goals: many(goals),
+  goalCompletions: many(goalCompletions),
 }))

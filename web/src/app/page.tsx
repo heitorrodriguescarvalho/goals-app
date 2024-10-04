@@ -1,23 +1,27 @@
 'use client'
 
-import { getSummary } from '@/actions/http/get-summary'
-import CreateGoal from '@/components/home/create-goal'
-import EmptyGoals from '@/components/home/empty-goals'
-import Summary from '@/components/home/summary'
+import CreateGoal from '@/components/layout/create-goal'
+import EmptyGoals from '@/components/layout/empty-goals'
+import Loader from '@/components/layout/loader'
+import Summary from '@/components/layout/summary'
+import Unauthenticated from '@/components/layout/unauthenticated'
 import { Dialog } from '@/components/ui/dialog'
-import { useQuery } from '@tanstack/react-query'
+import { useSummary } from '@/hooks/use-summary'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
-  const { data } = useQuery({
-    queryKey: ['summary'],
-    queryFn: getSummary,
-    staleTime: 1000 * 60, // 60 seconds
-  })
+  const { status } = useSession()
+
+  const { data, isLoading } = useSummary()
+
+  if (status === 'unauthenticated') return <Unauthenticated />
 
   return (
     <Dialog>
-      {data && data?.total > 0 ? <Summary /> : <EmptyGoals />}
-      <CreateGoal />
+      <Loader isLoading={isLoading || status === 'loading'}>
+        {data && data?.total > 0 ? <Summary /> : <EmptyGoals />}
+        <CreateGoal />
+      </Loader>
     </Dialog>
   )
 }

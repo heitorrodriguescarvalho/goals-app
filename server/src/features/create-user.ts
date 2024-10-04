@@ -4,21 +4,23 @@ import { users } from '../db/schema'
 
 interface createUserType {
   email: string
-  password?: string
+  image?: string
 }
 
-export async function createUser({ email, password }: createUserType) {
-  const hasUser = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  })
+export async function createUser({ email, image }: createUserType) {
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
 
-  if (hasUser) return { error: 'User already exists' }
+  if (existingUser) return { error: 'User already exists' }
 
   const result = await db
     .insert(users)
     .values({
       email,
-      password,
+      image,
     })
     .returning()
 

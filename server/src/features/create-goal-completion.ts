@@ -5,11 +5,12 @@ import { goalCompletions, goals } from '../db/schema'
 
 type CreateGoalCompletionRequest = Pick<
   typeof goalCompletions.$inferInsert,
-  'goalId'
+  'goalId' | 'userId'
 >
 
 export async function createGoalCompletion({
   goalId,
+  userId,
 }: CreateGoalCompletionRequest) {
   const firstDayOfWeek = dayjs().startOf('week').toDate()
   const lastDayOfWeek = dayjs().endOf('week').toDate()
@@ -25,7 +26,8 @@ export async function createGoalCompletion({
         and(
           gte(goalCompletions.createdAt, firstDayOfWeek),
           lte(goalCompletions.createdAt, lastDayOfWeek),
-          eq(goalCompletions.goalId, goalId)
+          eq(goalCompletions.goalId, goalId),
+          eq(goalCompletions.userId, userId),
         )
       )
       .groupBy(goalCompletions.goalId)
@@ -42,7 +44,7 @@ export async function createGoalCompletion({
     })
     .from(goals)
     .leftJoin(goalCompletionCounts, eq(goalCompletionCounts.goalId, goals.id))
-    .where(eq(goals.id, goalId))
+    .where(and(eq(goals.id, goalId), eq(goals.userId, userId)))
     .limit(1)
 
   const { completionCount, desiredWeeklyFrequency } = result[0]
@@ -53,7 +55,7 @@ export async function createGoalCompletion({
 
   const insertResult = await db
     .insert(goalCompletions)
-    .values({ goalId })
+    .values({ goalId, userId })
     .returning()
 
   const goalCompletion = insertResult[0]

@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/http/server.ts",
-    "seed": "tsx --env-file .env src/db/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "dev": "tsx watch --env-file .env src/server.ts",
+    "build": "tsc",
+    "start": "node --env-file .env dist/server.js",
+    "db:studio": "drizzle-kit studio --config=./src/drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config=./src/drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=./src/drizzle.config.ts"
   },
   "keywords": [],
   "author": "",

@@ -5,17 +5,19 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
-import { createCompletionRoute } from './routes/create-completion'
-import { createGoalRoute } from './routes/create-goal'
-import { createUserRoute } from './routes/create-user'
-import { getPendingGoalsRoute } from './routes/get-pending-goals'
-import { getUserRoute } from './routes/get-user'
-import { getWeekSummaryRoute } from './routes/get-week-summary'
+import { env } from './env'
+import { createCompletionRoute } from './http/routes/create-completion'
+import { createGoalRoute } from './http/routes/create-goal'
+import { createUserRoute } from './http/routes/create-user'
+import { deleteCompletionRoute } from './http/routes/delete-goal-completion'
+import { getPendingGoalsRoute } from './http/routes/get-pending-goals'
+import { getUserRoute } from './http/routes/get-user'
+import { getWeekSummaryRoute } from './http/routes/get-week-summary'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.register(fastifyCors, {
-  origin: '*',
+  origin: env.ORIGIN_URL,
 })
 
 app.setValidatorCompiler(validatorCompiler)
@@ -27,10 +29,11 @@ app.register(createUserRoute)
 app.register(getPendingGoalsRoute)
 app.register(getWeekSummaryRoute)
 app.register(getUserRoute)
+app.register(deleteCompletionRoute)
 
 app
   .listen({
-    port: 3333,
+    port: env.PORT || 3333,
   })
   .then(() => {
     console.log('HTTP server running')

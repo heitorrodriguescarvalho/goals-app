@@ -4,32 +4,16 @@ import { getUser } from '../../features/get-user'
 
 export const getUserRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    '/user',
+    '/user/:email',
     {
       schema: {
-        querystring: z.object({
-          email: z.string().min(1),
+        params: z.object({
+          email: z.string().email(),
         }),
-        response: {
-          200: z.object({
-            user: z.object({
-              id: z.string(),
-              email: z.string(),
-              password: z.string().nullable().optional(),
-              createdAt: z.date(),
-            }),
-          }),
-          404: z.object({
-            error: z.string(),
-          }),
-          500: z.object({
-            error: z.string(),
-          }),
-        },
       },
     },
     async (req, res) => {
-      const { email } = req.query
+      const { email } = req.params
 
       try {
         const { user, error } = await getUser({ email })

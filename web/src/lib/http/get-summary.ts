@@ -1,5 +1,3 @@
-'use server'
-
 type SummaryType = {
   completed: number
   total: number
@@ -13,8 +11,12 @@ type SummaryType = {
   >
 }
 
-export async function getSummary(): Promise<SummaryType> {
-  const response = await fetch('http://localhost:3333/summary')
+export async function getSummary({
+  userId,
+}: { userId: string }): Promise<SummaryType> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/summary/${userId}`
+  )
   const data: { summary: SummaryType } = await response.json()
 
   return data.summary

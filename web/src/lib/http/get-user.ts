@@ -1,5 +1,3 @@
-'use server'
-
 interface GetUserType {
   email: string
 }
@@ -7,7 +5,7 @@ interface GetUserType {
 interface UserType {
   id: string
   email: string
-  image?: string
+  password: string | null
   createdAt: Date
 }
 

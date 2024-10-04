@@ -1,5 +1,7 @@
 'use server'
 
+import { auth } from '@/auth'
+
 interface CreateGoalType {
   title: string
   desiredWeeklyFrequency: number
@@ -9,7 +11,11 @@ export async function createGoal({
   title,
   desiredWeeklyFrequency,
 }: CreateGoalType) {
-  await fetch('http://localhost:3333/goals', {
+  const session = await auth()
+
+  if (!session?.user?.id) throw new Error('Unauthorized')
+
+  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -17,6 +23,7 @@ export async function createGoal({
     body: JSON.stringify({
       title,
       desiredWeeklyFrequency,
+      userId: session.user.id,
     }),
   })
 }

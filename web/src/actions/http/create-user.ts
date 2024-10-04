@@ -1,41 +1,42 @@
 'use server'
 
-import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 
 type UserType = {
   id: string
   email: string
-  password: string | null
+  image?: string
   createdAt: Date
 }
 
 const createUserSchema = z.object({
-  email: z.string().min(1).email(),
-  password: z.string().min(1).optional(),
+  email: z.string().email(),
+  image: z.string().url().optional(),
 })
 
 export async function createUser(
   credentials: z.infer<typeof createUserSchema>
 ) {
-  console.log({ credentials })
   const { data, success } = createUserSchema.safeParse(credentials)
 
   if (!success)
     return { error: { statusCode: 400, message: 'Invalid credentials' } }
 
-  const { email, password } = data
+  const { email, image } = data
 
-  const response = await fetch('http://localhost:3333/create-user', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      password: password ? bcrypt.hashSync(password, 10) : undefined,
-    }),
-  })
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/create-user`,
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        image,
+      }),
+    }
+  )
 
   if (response.status === 409)
     return {
