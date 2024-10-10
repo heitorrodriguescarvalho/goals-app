@@ -2,12 +2,12 @@ import { and, eq } from 'drizzle-orm'
 import { db } from '../db'
 import { goalCompletions } from '../db/schema'
 
-interface GetUserType {
+interface DeleteCompletionType {
   userId: string
   completionId: string
 }
 
-export async function deleteGoalCompletion({ userId, completionId }: GetUserType) {
+export async function deleteGoalCompletion({ userId, completionId }: DeleteCompletionType) {
   const [goalCompletion] = await db
     .delete(goalCompletions)
     .where(and(

@@ -17,7 +17,7 @@ export default function EmptyGoals() {
         priority
       />
       <p className="max-w-80 text-center text-zinc-300 leading-relaxed">
-        Você ainda não cadastrou nenhuma meta, que tal cadastar uma agora mesmo?
+        Você ainda não cadastrou nenhuma meta, que tal cadastrar uma agora mesmo?
       </p>
 
       <DialogTrigger asChild>

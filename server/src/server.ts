@@ -6,6 +6,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { env } from './env'
+import { bulkDeleteGoalsRoute } from './http/routes/bulk-delete-goals'
 import { createCompletionRoute } from './http/routes/create-completion'
 import { createGoalRoute } from './http/routes/create-goal'
 import { createUserRoute } from './http/routes/create-user'
@@ -30,6 +31,7 @@ app.register(getPendingGoalsRoute)
 app.register(getWeekSummaryRoute)
 app.register(getUserRoute)
 app.register(deleteCompletionRoute)
+app.register(bulkDeleteGoalsRoute)
 
 app
   .listen({

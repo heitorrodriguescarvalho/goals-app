@@ -117,7 +117,7 @@ export default function Summary() {
                           className="flex w-full items-center gap-2 rounded-full px-2 py-2 hover:bg-zinc-900"
                         >
                           <CheckCircle2 className="size-4 text-pink-500" />
-                          <span className="flex-1 text-sm text-zinc-400">
+                          <span className="flex-1 text-sm truncate text-zinc-400">
                             Você completou "
                             <span className="text-zinc-100">{goal.title}</span>"
                             às <span className="text-zinc-100">{time}</span>
